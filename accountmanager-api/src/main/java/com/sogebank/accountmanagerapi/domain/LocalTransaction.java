@@ -2,11 +2,16 @@ package com.sogebank.accountmanagerapi.domain;
 
 import java.time.LocalDate;
 
+import com.sogebank.accountmanagerapi.domain.enums.TransactionType;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +29,10 @@ public class LocalTransaction {
     private Long id;
     private LocalDate createAt;
     private Double value;
-    private String type;
-    @OneToOne
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
+
+    @ManyToOne
+    @JoinColumn(name = "local_account_id")
     private LocalAccount account;
 }

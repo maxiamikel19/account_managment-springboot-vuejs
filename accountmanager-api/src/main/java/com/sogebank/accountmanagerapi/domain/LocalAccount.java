@@ -1,5 +1,7 @@
 package com.sogebank.accountmanagerapi.domain;
 
+import java.util.List;
+
 import com.sogebank.accountmanagerapi.domain.enums.AccountStatus;
 import com.sogebank.accountmanagerapi.domain.enums.AccountType;
 
@@ -12,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,4 +48,7 @@ public class LocalAccount {
     @ManyToOne
     @JoinColumn(name = "local_user_id")
     private LocalUser user;
+
+    @OneToMany(mappedBy = "account")
+    private List<LocalTransaction> transactions;
 }
