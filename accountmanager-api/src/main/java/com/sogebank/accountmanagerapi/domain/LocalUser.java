@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import com.sogebank.accountmanagerapi.domain.dtos.LocalUserDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -52,4 +54,13 @@ public class LocalUser {
 
     @OneToMany(mappedBy = "user")
     private List<LocalAccount> accounts ;
+
+    public LocalUser(LocalUserDTO obj){
+        this.id = obj.getId();
+        this.name = obj.getName();
+        this.cpf = obj.getCpf();
+        this.email = obj.getEmail();
+        this.password = obj.getPassword();
+        this.username = obj.getUsername();
+    }
 }
