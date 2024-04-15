@@ -57,5 +57,15 @@ public class LocalUserServiceImpl implements LocalUserService {
         }
         return user.get();
     }
+
+    @Override
+    public LocalUser getUserByUsername(String username) {
+        Optional<LocalUser> user = userRepository.findByUsername(username);
+        if(!user.isPresent()){
+            throw new ObjectSearchNotFoundException("Username not found");
+        }else{
+            return user.get();
+        }
+    }
     
 }

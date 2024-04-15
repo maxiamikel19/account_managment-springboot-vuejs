@@ -10,4 +10,6 @@ public interface LocalUserService {
     public LocalUserDTO getUserByCpf(String cpf);
 
     public LocalUser getUserById(Long id);
+
+    public LocalUser getUserByUsername(String username);
 }

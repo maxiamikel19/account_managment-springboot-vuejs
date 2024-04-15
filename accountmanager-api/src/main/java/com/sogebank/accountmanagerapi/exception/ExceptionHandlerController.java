@@ -19,4 +19,18 @@ public class ExceptionHandlerController {
         StandardError err = new StandardError(e.getMessage(), HttpStatus.NOT_FOUND.value());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
     }
+
+    @ExceptionHandler(NullValueTransactionDetectedException.class)
+    public ResponseEntity<StandardError> nullValueTransactionDetectedException(NullValueTransactionDetectedException e){
+        StandardError err = new StandardError(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(err);
+    }
+
+    @ExceptionHandler(ObjectBlockedException.class)
+    public ResponseEntity<StandardError> objectBlockedException(ObjectBlockedException e){
+        StandardError err = new StandardError(e.getMessage(), HttpStatus.LOCKED.value());
+        return ResponseEntity.status(HttpStatus.LOCKED).body(err);
+    }
+
+    
 }

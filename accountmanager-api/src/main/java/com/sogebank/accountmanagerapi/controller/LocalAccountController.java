@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sogebank.accountmanagerapi.domain.dtos.LocalTransactionDTO;
+import com.sogebank.accountmanagerapi.domain.dtos.LocalTransactionRetreiveDTO;
 import com.sogebank.accountmanagerapi.domain.model.LocalAccountModel;
 import com.sogebank.accountmanagerapi.service.LocalAccountServiceImpl;
+import com.sogebank.accountmanagerapi.service.LocalTransactionServiceImpl;
 
 import jakarta.validation.Valid;
 
@@ -17,9 +20,11 @@ import jakarta.validation.Valid;
 public class LocalAccountController {
 
     private final LocalAccountServiceImpl accountService;
+    private final LocalTransactionServiceImpl transactionService;
 
-    public LocalAccountController(LocalAccountServiceImpl accountService) {
+    public LocalAccountController(LocalAccountServiceImpl accountService, LocalTransactionServiceImpl transactionService) {
         this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     @PostMapping
@@ -27,4 +32,15 @@ public class LocalAccountController {
         return  new ResponseEntity<>(accountService.createAccount(obj), HttpStatus.CREATED);
     }
     
+    @PostMapping("/deposite")
+    public ResponseEntity<?> deposite(@Valid @RequestBody LocalTransactionDTO obj){
+        return  new ResponseEntity<>(transactionService.depositeAtAccount(obj), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/retreive")
+    public ResponseEntity<?> retreiveToAccount(@Valid @RequestBody LocalTransactionRetreiveDTO obj){
+        return  new ResponseEntity<>(transactionService.retreiveToAccount(obj), HttpStatus.CREATED);
+    }
+
+   
 }

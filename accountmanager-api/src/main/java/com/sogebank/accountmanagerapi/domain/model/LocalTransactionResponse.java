@@ -14,4 +14,5 @@ public class LocalTransactionResponse {
     private Double transactionValue;
     private String status;
     private LocalDate creatAt;
+    private String userCpf;
 }

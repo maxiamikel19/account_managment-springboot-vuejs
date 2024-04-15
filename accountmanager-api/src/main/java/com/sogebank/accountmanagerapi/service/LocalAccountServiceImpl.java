@@ -1,15 +1,16 @@
 package com.sogebank.accountmanagerapi.service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.sogebank.accountmanagerapi.domain.LocalAccount;
 import com.sogebank.accountmanagerapi.domain.LocalUser;
-import com.sogebank.accountmanagerapi.domain.dtos.LocalAccountDTO;
-import com.sogebank.accountmanagerapi.domain.dtos.LocalTransactionDTO;
 import com.sogebank.accountmanagerapi.domain.enums.AccountStatus;
 import com.sogebank.accountmanagerapi.domain.model.LocalAccountModel;
+import com.sogebank.accountmanagerapi.exception.ObjectBlockedException;
+import com.sogebank.accountmanagerapi.exception.ObjectSearchNotFoundException;
 import com.sogebank.accountmanagerapi.repository.LocalAccountRepository;
 
 @Service
@@ -67,18 +68,61 @@ public class LocalAccountServiceImpl implements LocalAccountService {
     }
 
     @Override
-    public LocalAccountDTO deposite(String accountNumber, Double value) {
-        return null;
+    public void deposite(String accountNumber, Double value) {
+       LocalAccount account = findByAccountNumber(accountNumber);
+       if(isAccountNotBlocked(accountNumber)){
+         account.setBalance(NumberFormatDecimalService.convertDoubleTwoDecimals(account.getBalance() + value));
+         accountRepository.saveAndFlush(account);
+       }else{
+            throw new ObjectBlockedException("Account is now OFFLINE!, please contact your administrator");
+       }
     }
 
     @Override
-    public LocalAccountDTO checkBalance(String accountNumber) {
-        return null;
+    public Double checkBalance(String accountNumber) {
+        LocalAccount account = findByAccountNumber(accountNumber);
+        Double balance = account.getBalance();
+        return balance;
     }
 
-    @Override
-    public LocalTransactionDTO makeTransaction(LocalTransactionDTO obj) {
-        return null;
+    
+    public boolean authorizeValue(Double balance, Double value) {
+        if(balance >= value){
+            return true;
+        }else{
+            return false;
+        }
     }
     
+
+    @Override
+    public LocalAccount findByAccountNumber(String accountNumber) {
+        Optional<LocalAccount> opAccount = accountRepository.findByAccountNumber(accountNumber);
+        if(!opAccount.isPresent()){
+            throw new ObjectSearchNotFoundException("Account number: "+accountNumber+" not found");
+        }else{
+            return opAccount.get();
+        }
+    }
+    
+    private Boolean isAccountNotBlocked(String accountNumber){
+        LocalAccount account = findByAccountNumber(accountNumber);
+        if(account.getStatus().equals(AccountStatus.LOCKED)){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
+    @Override
+    public void retreive(String accountNumber, Double value) {
+        LocalAccount account = findByAccountNumber(accountNumber);
+       if(isAccountNotBlocked(accountNumber)){
+         account.setBalance(NumberFormatDecimalService.convertDoubleTwoDecimals(account.getBalance() - value));
+         accountRepository.saveAndFlush(account);
+       }else{
+            throw new ObjectBlockedException("Account is now OFFLINE!, please contact your administrator");
+       }
+    }
 }

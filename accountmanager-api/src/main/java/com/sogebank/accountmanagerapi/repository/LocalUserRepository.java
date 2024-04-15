@@ -13,4 +13,5 @@ public interface LocalUserRepository extends JpaRepository<LocalUser, Long>{
 
     Optional<LocalUser> findByCpf(String cpf);
     
+    Optional<LocalUser> findByUsername(String username);
 }
