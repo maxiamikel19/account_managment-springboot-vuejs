@@ -39,7 +39,7 @@ public class LocalUserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public LocalUserDTO findByCpf(String cpf) {
+    public LocalUserDTO getUserByCpf(String cpf) {
 
         Optional<LocalUser> user = userRepository.findByCpf(cpf);
         if(!user.isPresent()){
@@ -47,6 +47,15 @@ public class LocalUserServiceImpl implements LocalUserService {
         }
         LocalUserDTO userDto = new LocalUserDTO(user.get());
         return userDto;
+    }
+
+    @Override
+    public LocalUser getUserById(Long id) {
+        Optional<LocalUser> user = userRepository.findById(id);
+        if(!user.isPresent()){
+            throw new ObjectSearchNotFoundException("User ID not found: "+ id);
+        }
+        return user.get();
     }
     
 }

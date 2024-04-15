@@ -32,6 +32,6 @@ public class LocalUserController {
 
     @GetMapping("/{cpf}")
     public ResponseEntity<LocalUserDTO> getUserByCpf(@PathVariable String cpf){
-        return ResponseEntity.ok().body(userService.findByCpf(cpf));
+        return ResponseEntity.ok().body(userService.getUserByCpf(cpf));
     }
 }
