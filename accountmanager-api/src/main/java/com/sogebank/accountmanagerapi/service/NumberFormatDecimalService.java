@@ -2,7 +2,7 @@ package com.sogebank.accountmanagerapi.service;
 
 import java.text.DecimalFormat;
 
-public class NumberFormatDecimal {
+public class NumberFormatDecimalService {
     public static double convertDoubleTwoDecimals(Double value) {
         DecimalFormat fmt = new DecimalFormat("0.00");      
         String string = fmt.format(value);
